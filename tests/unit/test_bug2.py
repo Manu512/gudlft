@@ -39,3 +39,35 @@ def test_booking_empty(clients):
     response = clients.post('/purchasePlaces', data={'club': club, 'competition': competition, 'places': place})
     assert response.status_code == 200
     assert b"Something went wrong-please try again"
+
+
+def test_book_without_session(clients):
+    response = clients.get('/book/{}/{}'.format(competition, club))
+    assert response.status_code == 302
+    assert "Redirecting" in str(response.data)
+
+
+def test_book_with_session(clients):
+    know_email = "admin@irontemple.com"
+    response = clients.post('/', data={'email': know_email})
+    response = clients.get('/book/{}/{}'.format(competition, club))
+    assert response.status_code == 200
+    assert competition in str(response.data)
+
+
+def test_book_with_session_wrong_club(clients):
+    know_email = "admin@irontemple.com"
+    response = clients.post('/', data={'email': know_email})
+    response = clients.get('/book/{}/{}'.format(competition, 'Simply Lift'))
+    assert response.status_code == 302
+    assert "You should be redirected automatically to target URL" in str(response.data)
+
+
+def test_book_with_session_inexistant_club(clients):
+    know_email = "admin@irontemple.com"
+    response = clients.post('/', data={'email': know_email})
+    response = clients.get('/book/{}/{}'.format(competition, 'Simply'))
+    assert response.status_code == 302
+    assert "You should be redirected automatically to target URL" in str(response.data)
+
+

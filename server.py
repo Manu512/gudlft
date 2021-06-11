@@ -41,21 +41,23 @@ def index():
 def showSummary():
     if session.get('email') is not None:
         club = [club for club in clubs if club['email'] == session['email']]
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=club[0], competitions=competitions)
     else:
         return redirect(url_for('index'))
 
 
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
-    if session.get('email') is not None:
-        foundClub = [c for c in clubs if c['name'] == club][0]
-        foundCompetition = [c for c in competitions if c['name'] == competition][0]
-        if foundClub and foundCompetition:
-            return render_template('booking.html', club=foundClub, competition=foundCompetition)
-        else:
+    foundClub = [c for c in clubs if c['name'] == club]
+    foundCompetition = [c for c in competitions if c['name'] == competition]
+    if session.get('email') is not None and len(foundClub) and len(foundCompetition):
+        foundClub = foundClub[0]
+        foundCompetition = foundCompetition[0]
+        if foundClub['name'] != session['name']:
             flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions)
+            return redirect(url_for('showSummary'))
+        else:
+            return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
         return redirect(url_for('index'))
 
