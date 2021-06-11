@@ -1,0 +1,10 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+omit =
+    # omit anything in a bin directory anywhere
+    */bin/*
+
+[html]
+title = "Testing Code Coverage - GudLFT"
+directory = tests/coverage-reports
