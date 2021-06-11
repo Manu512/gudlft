@@ -28,7 +28,7 @@ def index():
         club = [club for club in clubs if club['email'] == session['email']]
         if session['email']:
             if club:
-                return render_template('welcome.html', club=club, competitions=competitions)
+                return render_template('welcome.html', club=club[0], competitions=competitions)
             else:
                 flash("Adresse email non autorisée ! Merci de contacter l'administrateur : admin@gudlift.org")
         else:
