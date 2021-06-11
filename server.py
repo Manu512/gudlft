@@ -56,20 +56,23 @@ def book(competition, club):
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
-    placesRequired = int(request.form['places'])
 
-    if placesRequired <= 12 and int(competition['numberOfPlaces']) > 0:
-        if placesRequired <= int(club['points']):
-            competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
-            if competition['numberOfPlaces'] >= 0:
-                flash('Great-booking complete ! You have reserved {} places.'.format(placesRequired))
+    if request.form['places'] != '':
+        placesRequired = int(request.form['places'])
+        if placesRequired <= 12 and int(competition['numberOfPlaces']) > 0:
+            if placesRequired <= int(club['points']):
+                competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
+                if competition['numberOfPlaces'] >= 0:
+                    flash('Great-booking complete ! You have reserved {} places.'.format(placesRequired))
+            else:
+                flash('Waouhou ! booking incomplete ! Not enough place in your wallet !')
         else:
-            flash('Waouhou ! booking incomplete ! Not enough place in your wallet !')
+            if competition['numberOfPlaces'] > 0:
+                flash('Booking incomplete ! 12 places maximum, subject to availability in your wallet !')
+            else:
+                flash('Booking incomplete ! We are sorry, the competition is full !')
     else:
-        if competition['numberOfPlaces'] > 0:
-            flash('Booking incomplete ! 12 places maximum, subject to availability in your wallet !')
-        else:
-            flash('Booking incomplete ! We are sorry, the competition is full !')
+        flash("Something went wrong-please try again")
     return render_template('welcome.html', club=club, competitions=competitions)
 
 # TODO: Add route for points display

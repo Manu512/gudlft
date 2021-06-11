@@ -31,3 +31,11 @@ def test_thirteen_place_booking(clients):
     response = clients.post('/purchasePlaces', data={'club': club, 'competition': competition, 'places': place})
     assert response.status_code == 200
     assert b"Booking incomplete ! 12 places maximum, subject to availability in your wallet"
+
+
+def test_booking_empty(clients):
+    place = ''
+    club = 'Simply Lift'
+    response = clients.post('/purchasePlaces', data={'club': club, 'competition': competition, 'places': place})
+    assert response.status_code == 200
+    assert b"Something went wrong-please try again"
