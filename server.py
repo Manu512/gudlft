@@ -82,6 +82,7 @@ def purchasePlaces():
             if placesRequired <= int(club['points']):
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
                 if competition['numberOfPlaces'] >= 0:
+                    club['points'] = int(club['points']) - placesRequired
                     flash('Great-booking complete ! You have reserved {} places.'.format(placesRequired))
             else:
                 flash('Waouhou ! booking incomplete ! Not enough place in your wallet !')
