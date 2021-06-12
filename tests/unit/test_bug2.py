@@ -50,9 +50,17 @@ def test_book_without_session(clients):
 def test_book_with_session(clients):
     know_email = "admin@irontemple.com"
     response = clients.post('/', data={'email': know_email})
-    response = clients.get('/book/{}/{}'.format(competition, club))
+    response = clients.get('/book/Fall%20Classic2/Iron%20Temple')
     assert response.status_code == 200
-    assert competition in str(response.data)
+    assert "Fall Classic2" in str(response.data)
+
+
+def test_book_with_session_closed(clients):
+    know_email = "admin@irontemple.com"
+    response = clients.post('/', data={'email': know_email})
+    response = clients.get('/book/Fall%20Classic/Iron%20Temple')
+    assert response.status_code == 302
+    assert "You should be redirected automatically to target URL" in str(response.data)
 
 
 def test_book_with_session_wrong_club(clients):

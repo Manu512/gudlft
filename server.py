@@ -1,4 +1,5 @@
 import json
+import datetime
 from flask import Flask, render_template, request, redirect, flash, url_for, session
 
 
@@ -11,6 +12,10 @@ def loadClubs():
 def loadCompetitions():
     with open('competitions.json') as comps:
         listOfCompetitions = json.load(comps)['competitions']
+
+        for comp in listOfCompetitions:
+            if datetime.datetime.fromisoformat(comp['date']) < datetime.datetime.now():
+                comp['closed'] = True
         return listOfCompetitions
 
 
@@ -50,11 +55,15 @@ def showSummary():
 def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club]
     foundCompetition = [c for c in competitions if c['name'] == competition]
+
     if session.get('email') is not None and len(foundClub) and len(foundCompetition):
         foundClub = foundClub[0]
         foundCompetition = foundCompetition[0]
         if foundClub['name'] != session['name']:
             flash("Something went wrong-please try again")
+            return redirect(url_for('showSummary'))
+        if datetime.datetime.fromisoformat(foundCompetition['date']) < datetime.datetime.now():
+            flash("Sorry booking is closed because Competition is terminated")
             return redirect(url_for('showSummary'))
         else:
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
