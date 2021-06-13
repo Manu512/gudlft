@@ -18,3 +18,13 @@ def test_competition_booking_message(clients):
     assert "Welcome, " + email1 in str(response.data)
     assert b"Booking incomplete ! We are sorry, the competition is full !" in response.data
 
+
+def test_points(clients):
+    response = clients.get('/points')
+    assert response.status_code == 200
+    assert b"Clubs Available points" in response.data
+
+
+def test_lost(clients):
+    response = clients.get('/lost_anywhere')
+    assert response.status_code == 302

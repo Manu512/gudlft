@@ -26,6 +26,12 @@ competitions = loadCompetitions()
 clubs = loadClubs()
 
 
+@app.route('/', defaults={'u_path': ''})
+@app.route('/<path:u_path>')
+def catch_all(u_path):
+    return redirect(url_for('index'))
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
