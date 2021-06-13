@@ -15,5 +15,11 @@
             "date": "2021-10-22 13:30:00",
             "numberOfPlaces": "5"
         }
+        ,
+        {
+            "name": "Do IT !",
+            "date": "2021-07-22 13:30:00",
+            "numberOfPlaces": "0"
+        }
     ]
 }
