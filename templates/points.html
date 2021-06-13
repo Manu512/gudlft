@@ -5,13 +5,19 @@
     <title>GUDLFT Registration</title>
 </head>
 <body>
-    <h1>Welcome to the GUDLFT Registration Portal!</h1>
-    Please enter your secretary email to continue:
-    <form method="post">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id=""/>
-        <button type="submit">Enter</button>
-    </form>
+    <h1>Welcome to the GUDLFT Portal!</h1>
+    Here, you can see available point for each club.
+
+    <h3>Clubs Available points :</h3>
+    <ul>
+        {% for club in clubs%}
+        <li>
+            {{club['name']}} - Available points: {{club['points']}}<br />
+        </li>
+        <hr />
+        {% endfor %}
+    </ul>
+
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -23,7 +29,7 @@
       {% endif %}
     {% endwith %}
 
-    <a href="{{ url_for('points')}}">View club status points</a>
+    <a href="{{ url_for('showSummary')}}">Return to summary</a>
 
 </body>
 </html>
