@@ -53,6 +53,14 @@
 
     We performed the tests with Pytest, Coverage and Locust.  
     Command line as follow :  
-    * `set COVERAGE_RCFILE=%cd%\tests\.coveragerc` in order to load config of coverage
+    * `set COVERAGE_RCFILE=%PYTHONPATH%\tests\.coveragerc` in order to load config of coverage
     * `coverage run -m pytest`
     * `coverage html` or `coverage report` depending on the desired output format html report is in tests directory
+    
+    For load testing:
+    * `Set LOCUST_LOCUSTFILE=%PYTHONPATH%\tests\locustfile.py`    in order to load config test of Locust
+    * `locust`
+    
+    After loading the url : [Locust 127.0.0.1:8089](http://127.0.0.1:8089)
+
+

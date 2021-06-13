@@ -6,7 +6,7 @@ from locust import HttpUser, task, between
 class QuickstartUser(HttpUser):
     wait_time = between(1, 2.5)
 
-    @task
+    @task(6)
     def show_summary(self):
         """ display tournament list """
         self.client.get("/showSummary")
@@ -23,9 +23,12 @@ class QuickstartUser(HttpUser):
 
     @task
     def purchase_post(self):
-        self.client.post("/purchasePlaces", data={'club': 'Iron Temple',
+        """booking place and update point"""
+        with self.client.post("/purchasePlaces", data={'club': 'Iron Temple',
                                                   'competition': 'Spring Festival',
-                                                  'places': 1})
+                                                  'places': 1}) as response:
+            if response.elapsed.total_seconds() > 2:
+                response.failure("Request took too long")
 
     @task
     def purchase_post_wrong_club(self):
@@ -33,14 +36,16 @@ class QuickstartUser(HttpUser):
                                                   'competition': 'Spring Festival',
                                                   'places': 1})
 
-    @task
+    @task(5)
     def book_get(self):
-        competition = ['Fall%20Classic', 'Spring%20Festival']
-        selected_competition = competition[randint(0, 1)]
-        self.client.get("/book/{}/Iron%20Temple".format(selected_competition))
+        competition = ['Fall%20Classic', 'Spring%20Festival', 'Fall%20Classic2', 'Do%20IT%20!']
+        clubs = ['She%20Lifts', 'Iron%20Temple', 'Simply%20Lift']
+        selected_competition = competition[randint(0, 3)]
+        selected_club = clubs[randint(0, 2)]
+        self.client.get("/book/{}/{}".format(selected_competition, selected_club))
 
 
-    @task
+    @task(11)
     def index_post(self):
         with self.client.get("/", catch_response=True) as response:
             if "Welcome" not in response.text:
@@ -48,11 +53,23 @@ class QuickstartUser(HttpUser):
             elif response.elapsed.total_seconds() > 0.5:
                 response.failure("Request took too long")
 
+    @task(10)
+    def points_get(self):
+        """view clubs status points"""
+        with self.client.get("/points", catch_response=True) as response:
+            if "Clubs Available points" not in response.text:
+                response.failure("Got wrong response")
+            elif response.elapsed.total_seconds() > 2:
+                response.failure("Request took too long")
+
+    @task
+    def test_lost(self):
+        self.client.get("/lost_anywhere")
+
 
     def on_start(self):
         """ login form / Initialize session"""
         self.client.post("/", data={"email": "admin@irontemple.com"})
-
 
     def on_quit(self):
         """ logout """
