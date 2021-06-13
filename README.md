@@ -33,6 +33,10 @@
 
     - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to 
       set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details 
+
+      QuickStart for Windows: run `env.bat` in the main directory, it will set the environment variables. Step by 
+      step details below.
+
       - For Windows in the directory : 
         - `set PYTHONPATH=%cd%` 
         - `set FLASK_APP="server.py"` 
@@ -53,14 +57,22 @@
 
     We performed the tests with Pytest, Coverage and Locust.  
     Command line as follow :  
-    * `set COVERAGE_RCFILE=%PYTHONPATH%\tests\.coveragerc` in order to load config of coverage
+    * `set COVERAGE_RCFILE=%PYTHONPATH%\tests\.coveragerc` in order to load config of coverage (env.bat do it)
     * `coverage run -m pytest`
-    * `coverage html` or `coverage report` depending on the desired output format html report is in tests directory
-    
-    For load testing:
-    * `Set LOCUST_LOCUSTFILE=%PYTHONPATH%\tests\locustfile.py`    in order to load config test of Locust
-    * `locust`
-    
-    After loading the url : [Locust 127.0.0.1:8089](http://127.0.0.1:8089)
+    * `coverage html` or `coverage report` depending on the desired output format html report is in tests directory  
 
 
+![Coverage Report](tests/coverage-reports/Coverage_Testing.png)  
+
+For load testing:  
+
+  * `Set LOCUST_LOCUSTFILE=%PYTHONPATH%\tests\locustfile.py`    in order to load config test of Locust (env.bat do it)
+  * `locust`
+  
+   Go url : [Locust 127.0.0.1:8089](http://127.0.0.1:8089)  
+
+![Locust Index](tests/locust_screenshot/locust_index.png)
+![Locust Path](tests/locust_screenshot/locust_test_path.png)
+![Locust Number Users](tests/locust_screenshot/number_of_users.png)
+![Locust Response Time](tests/locust_screenshot/response_times_(ms).png)
+![Locust RPS](tests/locust_screenshot/total_requests_per_second.png)
