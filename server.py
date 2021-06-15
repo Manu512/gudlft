@@ -12,7 +12,6 @@ def loadClubs():
 def loadCompetitions():
     with open('competitions.json') as comps:
         listOfCompetitions = json.load(comps)['competitions']
-
         for comp in listOfCompetitions:
             if datetime.datetime.fromisoformat(comp['date']) < datetime.datetime.now():
                 comp['closed'] = True
@@ -86,14 +85,15 @@ def purchasePlaces():
     if request.form['places'] != '':
         placesRequired = int(request.form['places'])
         if placesRequired <= 12 and int(competition['numberOfPlaces']) > 0:
-            if placesRequired <= int(club['points']):
+            club_capability = int(club['points'])//3
+            if placesRequired <= club_capability:
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
-                club['points'] = int(club['points']) - placesRequired
+                club['points'] = int(club['points']) - (placesRequired*3)
                 flash('Great-booking complete ! You have reserved {} places.'.format(placesRequired))
             else:
                 flash('Waouhou ! booking incomplete ! Not enough place in your wallet !')
         else:
-            if competition['numberOfPlaces'] > 0:
+            if int(competition['numberOfPlaces']) > 0:
                 flash('Booking incomplete ! 12 places maximum, subject to availability in your wallet !')
             else:
                 flash('Booking incomplete ! We are sorry, the competition is full !')
