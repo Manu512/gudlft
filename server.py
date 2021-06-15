@@ -29,6 +29,7 @@ clubs = loadClubs()
 @app.route('/', defaults={'u_path': ''})
 @app.route('/<path:u_path>')
 def catch_all(u_path):
+    flash("You have been redirected. You were lost!")
     return redirect(url_for('index'))
 
 
